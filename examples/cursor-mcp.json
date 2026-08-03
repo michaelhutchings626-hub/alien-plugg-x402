@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "alien-plugg": {
+      "url": "https://base44.app/api/apps/6a5fdd57651262e86b24133e/functions/mcpHandshake",
+      "transport": "http"
+    },
+    "alien-plugg-stdio": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch",
+        "https://base44.app/api/apps/6a5fdd57651262e86b24133e/functions/mcpHandshake"
+      ]
+    }
+  }
+}

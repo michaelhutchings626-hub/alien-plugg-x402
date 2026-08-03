@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "alien-plugg": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch",
+        "https://base44.app/api/apps/6a5fdd57651262e86b24133e/functions/mcpHandshake"
+      ]
+    }
+  }
+}

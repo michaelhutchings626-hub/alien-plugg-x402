@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "name": "Alien Plugg x402",
+  "description": "30 pay-per-call crypto analysis endpoints via x402 USDC micropayments on Base. Zora scanner, rug check, honeypot detection, whale tracking, holder analysis, sentiment scoring, daily alpha report, and more. MCP server with 10 tools for AI agents.",
+  "version": "2.0.0",
+  "base_url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/",
+  "payment": {
+    "protocol": "x402",
+    "chain": "base",
+    "token": "USDC",
+    "price_range": "$0.0015 - $0.25 per call"
+  },
+  "mcp_server": {
+    "url": "https://base44.app/api/apps/6a5fdd57651262e86b24133e/functions/mcpHandshake",
+    "transport": "streamable-http",
+    "tools": 10,
+    "free_operations": ["initialize", "tools/list", "resources/list"],
+    "paid_operations": ["tools/call"]
+  },
+  "discovery": {
+    "json": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery",
+    "llms_txt": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery?format=llms",
+    "openapi": "https://github.com/michaelhutchings626-hub/alien-plugg-x402/blob/main/openapi.yaml"
+  },
+  "tokens": [
+    {
+      "name": "PLUGG on Base",
+      "address": "0xDe76415CeBe959CF0738e8A636d9153fF295bba3",
+      "chain": "base",
+      "launch_url": "https://bankr.bot/launches/0xDe76415CeBe959CF0738e8A636d9153fF295bba3"
+    },
+    {
+      "name": "PLUGG on Robinhood",
+      "address": "0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3",
+      "chain": "robinhood",
+      "launch_url": "https://bankr.bot/launches/0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3"
+    }
+  ],
+  "categories": ["crypto", "zora", "base", "defi", "on-chain", "analysis", "trading", "security"],
+  "endpoints": [
+    {"name": "discovery", "method": "GET", "path": "/discovery", "price": "FREE", "description": "Full catalog of all endpoints"},
+    {"name": "zora-scanner", "method": "GET", "path": "/zora-scanner", "price": "$0.01", "description": "Trending Zora coins + BUY/SELL signals"},
+    {"name": "zora-rug-check", "method": "GET", "path": "/zora-rug-check", "price": "$0.02", "description": "0-100 rug risk score + verdict"},
+    {"name": "honeypot-check", "method": "GET", "path": "/honeypot-check", "price": "$0.04", "description": "Honeypot detector — can you sell?"},
+    {"name": "holder-analysis", "method": "GET", "path": "/holder-analysis", "price": "$0.03", "description": "Holder concentration + Gini coefficient"},
+    {"name": "zora-sentiment", "method": "GET", "path": "/zora-sentiment", "price": "$0.05", "description": "Social sentiment + ACCUMULATE/HOLD/REDUCE"},
+    {"name": "alien-plugg-alpha", "method": "GET", "path": "/alien-plugg-alpha", "price": "$0.05", "description": "Daily curated trading signals"},
+    {"name": "alien-plugg-pro-alpha", "method": "GET", "path": "/alien-plugg-pro-alpha", "price": "$0.25", "description": "PRO tier alpha with technical levels"},
+    {"name": "whale-tracker", "method": "GET", "path": "/whale-tracker", "price": "$0.08", "description": "Large whale transfers on Base"},
+    {"name": "smart-money", "method": "GET", "path": "/smart-money", "price": "$0.08", "description": "Track smart money wallets"},
+    {"name": "dex-flow", "method": "GET", "path": "/dex-flow", "price": "$0.12", "description": "Uniswap V3 liquidity flow analysis"},
+    {"name": "gas-tracker", "method": "GET", "path": "/gas-tracker", "price": "$0.002", "description": "Real-time Base gas prices"},
+    {"name": "token-price", "method": "GET", "path": "/token-price", "price": "$0.015", "description": "CoinGecko price lookup"},
+    {"name": "translate", "method": "GET", "path": "/translate", "price": "$0.005", "description": "100+ language translation"},
+    {"name": "ip-info", "method": "GET", "path": "/ip-info", "price": "$0.0015", "description": "IP geolocation + VPN detection"},
+    {"name": "wallet-profile", "method": "GET", "path": "/wallet-profile", "price": "$0.003", "description": "On-chain wallet profiler"},
+    {"name": "new-launches", "method": "GET", "path": "/new-launches", "price": "$0.01", "description": "Newest Zora token launches"},
+    {"name": "creator-lookup", "method": "GET", "path": "/creator-lookup", "price": "$0.01", "description": "Creator profile + all their coins"},
+    {"name": "zora-portfolio", "method": "GET", "path": "/zora-portfolio", "price": "$0.005", "description": "Wallet holdings + PnL"},
+    {"name": "token-compare", "method": "GET", "path": "/token-compare", "price": "$0.005", "description": "Side-by-side token comparison"},
+    {"name": "chart-roast", "method": "GET", "path": "/chart-roast", "price": "$0.008", "description": "Brutal chart analysis + signals"},
+    {"name": "builder-score", "method": "GET", "path": "/builder-score", "price": "$0.008", "description": "AI-powered builder reputation score"},
+    {"name": "expand-url", "method": "GET", "path": "/expand-url", "price": "$0.015", "description": "URL redirect chain tracer"},
+    {"name": "tech-stack-detect", "method": "GET", "path": "/tech-stack-detect", "price": "$0.008", "description": "Website tech stack fingerprinting"},
+    {"name": "webpage-diff", "method": "GET", "path": "/webpage-diff", "price": "$0.03", "description": "Webpage change monitor + diff"},
+    {"name": "price-alerts", "method": "GET", "path": "/price-alerts", "price": "$0.008", "description": "Zora token price alert management"},
+    {"name": "tx-status", "method": "GET", "path": "/tx-status", "price": "$0.002", "description": "Transaction status checker"},
+    {"name": "robinhood-scanner", "method": "GET", "path": "/robinhood-scanner", "price": "$0.01", "description": "Robinhood Chain trending tokens"},
+    {"name": "whale-alert", "method": "GET", "path": "/whale-alert", "price": "$0.015", "description": "Whale movement alerts"},
+    {"name": "rug-alert", "method": "GET", "path": "/rug-alert", "price": "$0.012", "description": "Rug detection alerts"},
+    {"name": "launch-alert", "method": "GET", "path": "/launch-alert", "price": "$0.01", "description": "New launch alerts"},
+    {"name": "mcp-handshake", "method": "POST", "path": "/mcp-handshake", "price": "FREE", "description": "MCP protocol handshake (initialize, tools/list)"}
+  ]
+}
