@@ -1,15 +1,312 @@
 {
   "name": "Alien Plugg x402 API",
-  "description": "30 pay-per-call crypto analysis endpoints via x402 USDC micropayments on Base. MCP server with 10 tools for AI agents.",
-  "version": "2.0.0",
+  "description": "32 paid x402 API endpoints for Robinhood Chain stock tokens, Zora crypto analysis, on-chain intelligence, and utilities. MCP server with 15 tools for AI agents. USDC on Base.",
   "wallet": "0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d",
-  "chain": "base",
-  "payment_token": "USDC",
+  "network": "base",
+  "currency": "USDC",
+  "endpoints": [
+    {
+      "name": "rh-stock-prices",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/rh-stock-prices",
+      "price": "0.02",
+      "description": "Live stock token prices for 90+ tokenized stocks (NVDA, AAPL, TSLA)",
+      "method": "GET",
+      "category": "Robinhood Chain"
+    },
+    {
+      "name": "rh-stock-list",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/rh-stock-list",
+      "price": "0.01",
+      "description": "Full catalog of 90+ stock tokens with contract addresses",
+      "method": "GET",
+      "category": "Robinhood Chain"
+    },
+    {
+      "name": "rh-corporate-actions",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/rh-corporate-actions",
+      "price": "0.03",
+      "description": "Splits, dividends, mergers for stock tokens",
+      "method": "GET",
+      "category": "Robinhood Chain"
+    },
+    {
+      "name": "rh-stock-screener",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/rh-stock-screener",
+      "price": "0.02",
+      "description": "Screen/rank stock tokens by volume, tradability",
+      "method": "GET",
+      "category": "Robinhood Chain"
+    },
+    {
+      "name": "rh-dex-scanner",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/rh-dex-scanner",
+      "price": "0.02",
+      "description": "Block activity, gas, tx counts on chain 4663",
+      "method": "GET",
+      "category": "Robinhood Chain"
+    },
+    {
+      "name": "zora-scanner",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/zora-scanner",
+      "price": "0.01",
+      "description": "Trending Zora coins + BUY/SELL/STRONG_BUY signals",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "robinhood-scanner",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/robinhood-scanner",
+      "price": "0.01",
+      "description": "Robinhood Chain trending tokens + signals",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "zora-rug-check",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/zora-rug-check",
+      "price": "0.02",
+      "description": "0-100 rug risk score with verdict",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "zora-portfolio",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/zora-portfolio",
+      "price": "0.005",
+      "description": "Wallet holdings, PnL, allocation",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "zora-sentiment",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/zora-sentiment",
+      "price": "0.05",
+      "description": "Social sentiment scoring",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "honeypot-check",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/honeypot-check",
+      "price": "0.04",
+      "description": "Honeypot/sell-trap detector",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "holder-analysis",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/holder-analysis",
+      "price": "0.03",
+      "description": "Top holders, Gini coefficient",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "creator-lookup",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/creator-lookup",
+      "price": "0.01",
+      "description": "Creator profiles, coins, socials",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "new-launches",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/new-launches",
+      "price": "0.01",
+      "description": "Newest Zora token launches",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "chart-roast",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/chart-roast",
+      "price": "0.008",
+      "description": "Technical analysis + brutal roast",
+      "method": "GET",
+      "category": "Zora"
+    },
+    {
+      "name": "token-price",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/token-price",
+      "price": "0.015",
+      "description": "CoinGecko prices for any token",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "token-compare",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/token-compare",
+      "price": "0.005",
+      "description": "Side-by-side token comparison",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "whale-tracker",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/whale-tracker",
+      "price": "0.08",
+      "description": "Whale transfer detection on Base",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "smart-money",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/smart-money",
+      "price": "0.08",
+      "description": "Smart money tracking",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "dex-flow",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/dex-flow",
+      "price": "0.12",
+      "description": "Uniswap V3 liquidity flow",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "wallet-profile",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/wallet-profile",
+      "price": "0.003",
+      "description": "Wallet balance + behavioral label",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "gas-tracker",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/gas-tracker",
+      "price": "0.002",
+      "description": "Gas prices on 5 chains",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "tx-status",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/tx-status",
+      "price": "0.002",
+      "description": "Transaction status checker",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "builder-score",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/builder-score",
+      "price": "0.008",
+      "description": "AI builder reputation score",
+      "method": "GET",
+      "category": "On-Chain"
+    },
+    {
+      "name": "translate",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/translate",
+      "price": "0.005",
+      "description": "100+ languages",
+      "method": "GET",
+      "category": "Utility"
+    },
+    {
+      "name": "ip-info",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/ip-info",
+      "price": "0.0015",
+      "description": "IP geolocation + VPN detection",
+      "method": "GET",
+      "category": "Utility"
+    },
+    {
+      "name": "expand-url",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/expand-url",
+      "price": "0.015",
+      "description": "URL redirect resolver",
+      "method": "GET",
+      "category": "Utility"
+    },
+    {
+      "name": "tech-stack-detect",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/tech-stack-detect",
+      "price": "0.008",
+      "description": "Website tech fingerprinting",
+      "method": "GET",
+      "category": "Utility"
+    },
+    {
+      "name": "webpage-diff",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/webpage-diff",
+      "price": "0.03",
+      "description": "Webpage change monitor",
+      "method": "GET",
+      "category": "Utility"
+    },
+    {
+      "name": "price-alerts",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/price-alerts",
+      "price": "0.008",
+      "description": "Price alerts for Zora tokens",
+      "method": "GET",
+      "category": "Utility"
+    },
+    {
+      "name": "alien-plugg-alpha",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/alien-plugg-alpha",
+      "price": "0.05",
+      "description": "Daily curated alpha report",
+      "method": "GET",
+      "category": "Premium"
+    },
+    {
+      "name": "alien-plugg-pro-alpha",
+      "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/alien-plugg-pro-alpha",
+      "price": "0.25",
+      "description": "Pro alpha with technical analysis",
+      "method": "GET",
+      "category": "Premium"
+    }
+  ],
+  "mcp": {
+    "url": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/mcp-server",
+    "tools": [
+      "zora_scanner",
+      "zora_rug_check",
+      "zora_portfolio",
+      "honeypot_check",
+      "holder_analysis",
+      "creator_lookup",
+      "new_launches",
+      "token_price",
+      "chart_roast",
+      "alien_plugg_alpha"
+    ]
+  },
+  "tokens": [
+    {
+      "name": "Alien Plugg",
+      "symbol": "PLUGG",
+      "chain": "base",
+      "address": "0xDe76415CeBe959CF0738e8A636d9153fF295bba3",
+      "url": "https://bankr.bot/launches/0xDe76415CeBe959CF0738e8A636d9153fF295bba3"
+    },
+    {
+      "name": "Alien Plugg",
+      "symbol": "PLUGG",
+      "chain": "robinhood",
+      "address": "0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3",
+      "url": "https://bankr.bot/launches/0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3"
+    }
+  ],
+  "links": {
+    "website": "https://base44.app/api/apps/6a5fdd57651262e86b24133e/files/mp/public/6a5fdd57651262e86b24133e/1a205d56c_landing-page.html",
+    "chat": "https://app.base44.com/superagent/6a5fdd57651262e86b24133e",
+    "zora": "https://zora.co/@alienplugg"
+  },
+  "totalEndpoints": 32,
+  "mcpServer": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/mcp-server",
+  "mcpTools": 15,
   "discovery": "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery",
-  "mcp_server": "https://base44.app/api/apps/6a5fdd57651262e86b24133e/functions/mcpHandshake",
-  "github": "https://github.com/michaelhutchings626-hub/alien-plugg-x402",
-  "endpoints": 30,
-  "price_range": "$0.0015 - $0.25 USDC",
-  "free_endpoints": ["discovery", "mcp-handshake"],
-  "categories": ["crypto", "zora", "base", "defi", "on-chain", "trading", "security"]
+  "categories": {
+    "Robinhood Chain": 5,
+    "Zora": 11,
+    "On-Chain": 10,
+    "Utility": 6,
+    "Premium": 2
+  }
 }
