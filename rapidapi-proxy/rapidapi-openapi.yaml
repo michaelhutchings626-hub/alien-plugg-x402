@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: Alien Plugg — Crypto & Stock Token API
+  version: 2.0.0
+  description: >
+    32 API endpoints covering Robinhood Chain stock tokens (NVDA, AAPL, TSLA),
+    Zora crypto analysis, on-chain intelligence, and utilities.
+    
+    Unique offering: Live prices for 90+ tokenized stocks on Robinhood Chain.
+    
+    Categories:
+    • Robinhood Chain Stock Tokens (5) — prices, catalog, corporate actions, screener, DEX scanner
+    • Zora Crypto Analysis (11) — scanner, rug check, sentiment, portfolio, honeypot, holders
+    • On-Chain Intelligence (10) — whale tracker, smart money, DEX flow, gas, wallet profile
+    • Utilities (6) — translate, IP info, URL expansion, tech stack, webpage diff, alerts
+    • Premium Alpha (2) — daily curated trading signals + pro tier
+  contact:
+    name: Alien Plugg
+    url: https://app.base44.com/superagent/6a5fdd57651262e86b24133e
+  license:
+    name: MIT
+    url: https://github.com/michaelhutchings626-hub/alien-plugg-x402/blob/main/LICENSE
+
+servers:
+  - url: https://YOUR-PROXY.onrender.com
+    description: Production proxy (replace with your Render URL)
+
+security:
+  - RapidAPIKey: []
+
+components:
+  securitySchemes:
+    RapidAPIKey:
+      type: apiKey
+      in: header
+      name: X-RapidAPI-Key
+      description: Your RapidAPI API key (automatically added by RapidAPI)
+
+tags:
+  - name: Stock Tokens
+    description: Robinhood Chain tokenized stock data (NVDA, AAPL, TSLA, GOOGL)
+  - name: Crypto
+    description: Zora and Robinhood Chain crypto token analysis
+  - name: On-Chain
+    description: On-chain intelligence for Base
+  - name: Utility
+    description: General utility APIs
+  - name: Premium
+    description: Premium curated alpha and signals
+
+paths:
+  /api:
+    get:
+      tags: [Stock Tokens, Crypto, On-Chain, Utility, Premium]
+      summary: Call any Alien Plugg endpoint
+      description: >
+        Universal endpoint — pass the endpoint name and parameters.
+        RapidAPI users don't need crypto — the proxy handles USDC payments.
+        
+        Example: GET /api?endpoint=gas-tracker
+        Example: GET /api?endpoint=rh-stock-prices&symbol=NVDA
+        Example: GET /api?endpoint=zora-scanner&limit=10
+      operationId: callEndpoint
+      parameters:
+        - name: endpoint
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              # Stock Tokens
+              - rh-stock-prices
+              - rh-stock-list
+              - rh-corporate-actions
+              - rh-stock-screener
+              - rh-dex-scanner
+              # Crypto
+              - zora-scanner
+              - robinhood-scanner
+              - rug-check
+              - honeypot-check
+              - holder-analysis
+              - sentiment
+              - portfolio
+              - chart-roast
+              - new-launches
+              - creator-lookup
+              # On-Chain
+              - token-price
+              - token-compare
+              - whale-tracker
+              - smart-money
+              - dex-flow
+              - wallet-profile
+              - gas-tracker
+              - tx-status
+              - builder-score
+              # Utilities
+              - translate
+              - ip-info
+              - expand-url
+              - tech-stack
+              - webpage-diff
+              - price-alerts
+              # Premium
+              - daily-alpha
+              - pro-alpha
+          description: Which endpoint to call
+        # Common parameters passed through to the underlying x402 endpoint
+        - name: symbol
+          in: query
+          schema: { type: string }
+          description: "Stock/crypto symbol (e.g. NVDA, AAPL, BTC)"
+        - name: token
+          in: query
+          schema: { type: string }
+          description: "Token contract address (0x...)"
+        - name: address
+          in: query
+          schema: { type: string }
+          description: "Wallet address (0x...)"
+        - name: handle
+          in: query
+          schema: { type: string }
+          description: "Creator handle (e.g. @username)"
+        - name: wallet
+          in: query
+          schema: { type: string }
+          description: "Wallet address for portfolio lookup"
+        - name: text
+          in: query
+          schema: { type: string }
+          description: "Text to translate"
+        - name: to
+          in: query
+          schema: { type: string }
+          description: "Target language code (e.g. es, fr, de)"
+        - name: ip
+          in: query
+          schema: { type: string }
+          description: "IP address to look up"
+        - name: url
+          in: query
+          schema: { type: string }
+          description: "URL for expand-url or tech-stack"
+        - name: query
+          in: query
+          schema: { type: string }
+          description: "Search query for token-price"
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+          description: "Max results"
+        - name: sort
+          in: query
+          schema: { type: string }
+          description: "Sort by (volume, marketCap, change, spread, price)"
+        - name: minVolume
+          in: query
+          schema: { type: number }
+          description: "Minimum volume filter"
+        - name: blocks
+          in: query
+          schema: { type: integer, default: 5 }
+          description: "Blocks to scan (rh-dex-scanner)"
+        - name: extendedHours
+          in: query
+          schema: { type: string }
+          description: "Set to 'true' for extended-hours tradable stocks only"
+        - name: allDay
+          in: query
+          schema: { type: string }
+          description: "Set to 'true' for 24/5 tradable stocks only"
+        - name: tradable
+          in: query
+          schema: { type: string }
+          description: "Set to 'true' for only fractional-tradable stock tokens"
+        - name: filter
+          in: query
+          schema: { type: string }
+          description: "Filter stock tokens by symbol or name"
+        - name: type
+          in: query
+          schema: { type: string }
+          description: "Filter corporate actions by type (split, dividend, merger)"
+      responses:
+        '200':
+          description: Successful response with data from the x402 endpoint
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  endpoint:
+                    type: string
+                    description: Which endpoint was called
+                  category:
+                    type: string
+                    description: Endpoint category
+                  data:
+                    type: object
+                    description: The actual response data from the endpoint
+        '401':
+          description: Missing or invalid RapidAPI key
+        '429':
+          description: Monthly rate limit exceeded for your tier
+        '502':
+          description: x402 payment failed — proxy wallet may need USDC top-up
