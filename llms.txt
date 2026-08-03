@@ -1,0 +1,73 @@
+# Alien Plugg — x402 API Endpoints for AI Agents
+
+> What I have is outta this world 👽🌌
+
+32 paid x402 API endpoints + MCP server with 15 tools. USDC micropayments on Base.
+
+## Categories
+- **Robinhood Chain Stock Tokens** (5 endpoints) — tokenized stock prices, catalog, screener, corporate actions, DEX scanner
+- **Zora Crypto Analysis** (12 endpoints) — scanner, rug check, sentiment, portfolio, holders, honeypot, creator lookup
+- **On-Chain Intelligence** (7 endpoints) — whale tracker, smart money, DEX flow, wallet profile, gas, tx status, builder score
+- **Utilities** (6 endpoints) — translate, IP info, URL expansion, tech stack, webpage diff, price alerts
+- **Premium Alpha** (2 endpoints) — daily curated trading signals + pro tier
+
+## MCP Server
+POST https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/mcp-server
+15 tools: 8 Zora, 5 Robinhood Chain, 2 utilities
+
+## Robinhood Chain Stock Tokens (NEW — unique offering)
+- rh-stock-prices ($0.02) — Live bid/ask for 90+ tokenized stocks (NVDA, AAPL, TSLA, GOOGL, MSFT)
+- rh-stock-list ($0.01) — Full catalog with contract addresses + trading capabilities
+- rh-corporate-actions ($0.03) — Splits, dividends, mergers for stock tokens
+- rh-stock-screener ($0.02) — Screen/rank by volume, tradability, extended hours
+- rh-dex-scanner ($0.02) — Block activity, gas, tx counts on chain ID 4663
+
+## Zora Crypto Analysis
+- zora-scanner ($0.01) — Trending coins + BUY/SELL/STRONG_BUY signals
+- robinhood-scanner ($0.01) — Robinhood Chain trending tokens
+- zora-rug-check ($0.02) — 0-100 rug risk score with verdict
+- zora-portfolio ($0.005) — Wallet holdings, PnL, allocation
+- zora-sentiment ($0.05) — Social sentiment across Twitter/Farcaster/TikTok
+- honeypot-check ($0.04) — Honeypot/sell-trap detector
+- holder-analysis ($0.03) — Top holders, Gini coefficient, concentration
+- creator-lookup ($0.01) — Creator profiles, coins, social accounts
+- new-launches ($0.01) — Freshest token launches with age labels
+- chart-roast ($0.008) — Technical analysis + brutal roast
+- token-price ($0.015) — CoinGecko prices for any token
+- token-compare ($0.005) — Side-by-side token comparison
+
+## On-Chain Intelligence
+- whale-tracker ($0.08) — Large whale transfer detection on Base
+- smart-money ($0.08) — Smart money wallet tracking
+- dex-flow ($0.12) — Uniswap V3 liquidity flow analysis
+- wallet-profile ($0.003) — ETH/USDC balance, tx count, behavioral label
+- gas-tracker ($0.002) — Gas prices on Base, Ethereum, Arbitrum, Optimism, Polygon
+- tx-status ($0.002) — Transaction confirmation status + gas cost
+- builder-score ($0.008) — AI-powered builder reputation score
+
+## Utilities
+- translate ($0.005) — 100+ languages via Google Translate
+- ip-info ($0.0015) — IP geolocation + proxy/VPN detection
+- expand-url ($0.015) — Follow redirects, resolve final URL
+- tech-stack-detect ($0.008) — Website technology fingerprinting
+- webpage-diff ($0.03) — Monitor webpage changes
+- price-alerts ($0.008) — Set/check price alerts for Zora tokens
+
+## Premium Alpha
+- alien-plugg-alpha ($0.05) — Daily curated picks, signals, rug warnings
+- alien-plugg-pro-alpha ($0.25) — Pro alpha report with technical analysis
+
+## Discovery (FREE)
+GET https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery
+GET https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery?format=llms
+
+## Tokens
+- PLUGG on Base: 0xDe76415CeBe959CF0738e8A636d9153fF295bba3
+- PLUGG on Robinhood: 0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3
+- Creator Coin: https://zora.co/@alienplugg/creator-coin
+
+## Links
+- Chat: https://app.base44.com/superagent/6a5fdd57651262e86b24133e
+- GitHub: https://github.com/michaelhutchings626-hub/alien-plugg-x402
+- Bankr Launch (Base): https://bankr.bot/launches/0xDe76415CeBe959CF0738e8A636d9153fF295bba3
+- Bankr Launch (Robinhood): https://bankr.bot/launches/0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3
