@@ -2,8 +2,10 @@ openapi: 3.0.3
 info:
   title: Alien Plugg x402 API
   description: |
-    30 pay-per-call crypto analysis endpoints using x402 USDC micropayments on Base.
+    35 pay-per-call crypto analysis endpoints using x402 USDC micropayments on Base.
     
+    35 endpoints covering Robinhood Chain stock tokens (NVDA, AAPL, TSLA), Zora crypto analysis, on-chain intelligence, and utilities.
+
     All paid endpoints use the x402 protocol:
     1. Client sends request → server returns HTTP 402 with payment requirements
     2. Client pays USDC on Base → retries request with payment proof
@@ -12,7 +14,7 @@ info:
     Free endpoints: discovery, mcp-handshake
     
     MCP server with 10 tools available for Claude, Cursor, and other AI agents.
-  version: 2.0.0
+  version: 2.1.0
   contact:
     name: Alien Plugg
     url: https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery
@@ -534,3 +536,103 @@ components:
 externalDocs:
   description: Full documentation and examples
   url: https://github.com/michaelhutchings626-hub/alien-plugg-x402
+
+  # === Robinhood Chain Stock Tokens ===
+
+  /rh-stock-prices:
+    get:
+      tags: [Robinhood Chain]
+      summary: Live stock token prices
+      description: "Live bid/ask for 90+ tokenized stocks on Robinhood Chain (NVDA, AAPL, GOOGL, TSLA, MSFT). Returns raw prices, multiplier-adjusted token prices, daily volume, and trading halt status. Price: $0.02 USDC"
+      operationId: rhStockPrices
+      parameters:
+        - name: symbol
+          in: query
+          schema: { type: string }
+          description: Stock symbol (e.g., NVDA, AAPL). Omit for all stocks.
+      responses:
+        '200': { description: Stock token price data }
+        '402': { description: Payment required — $0.02 USDC on Base }
+
+  /rh-stock-list:
+    get:
+      tags: [Robinhood Chain]
+      summary: Stock token catalog
+      description: "Full catalog of 90+ Robinhood Chain stock tokens with contract addresses, multipliers, trading status, and capabilities. Price: $0.01 USDC"
+      operationId: rhStockList
+      parameters:
+        - name: filter
+          in: query
+          schema: { type: string }
+          description: Filter by symbol or name
+        - name: tradable
+          in: query
+          schema: { type: string }
+          description: Set to "true" for only fractional-tradable tokens
+      responses:
+        '200': { description: Stock token catalog }
+        '402': { description: Payment required — $0.01 USDC on Base }
+
+  /rh-corporate-actions:
+    get:
+      tags: [Robinhood Chain]
+      summary: Corporate actions for stock tokens
+      description: "Track splits, dividends, mergers, and spin-offs affecting tokenized stock holders. Critical for multiplier changes and dividend eligibility. Price: $0.03 USDC"
+      operationId: rhCorporateActions
+      parameters:
+        - name: symbol
+          in: query
+          schema: { type: string }
+          description: Filter by stock symbol
+        - name: type
+          in: query
+          schema: { type: string }
+          description: Filter by action type (split, dividend, merger)
+      responses:
+        '200': { description: Corporate actions list }
+        '402': { description: Payment required — $0.03 USDC on Base }
+
+  /rh-stock-screener:
+    get:
+      tags: [Robinhood Chain]
+      summary: Screen and rank stock tokens
+      description: "Filter stock tokens by volume, tradability, extended hours. Sort by volume, spread, or price. Perfect for finding the most liquid tokenized stocks. Price: $0.02 USDC"
+      operationId: rhStockScreener
+      parameters:
+        - name: minVolume
+          in: query
+          schema: { type: number }
+          description: Minimum daily volume threshold
+        - name: sort
+          in: query
+          schema: { type: string, enum: [volume, spread, price] }
+        - name: limit
+          in: query
+          schema: { type: integer }
+          description: Max results (default 20)
+        - name: extendedHours
+          in: query
+          schema: { type: string }
+          description: Set to "true" for extended-hours tradable only
+        - name: allDay
+          in: query
+          schema: { type: string }
+          description: Set to "true" for 24/5 tradable only
+      responses:
+        '200': { description: Screened stock tokens }
+        '402': { description: Payment required — $0.02 USDC on Base }
+
+  /rh-dex-scanner:
+    get:
+      tags: [Robinhood Chain]
+      summary: Robinhood Chain block scanner
+      description: "Scan recent blocks on Robinhood Chain (chain ID 4663) for activity, gas prices, and transaction counts. Covers Uniswap v4 DEX infrastructure. Price: $0.02 USDC"
+      operationId: rhDexScanner
+      parameters:
+        - name: blocks
+          in: query
+          schema: { type: integer }
+          description: Number of recent blocks to scan (default 5, max 50)
+      responses:
+        '200': { description: Block activity and chain stats }
+        '402': { description: Payment required — $0.02 USDC on Base }
