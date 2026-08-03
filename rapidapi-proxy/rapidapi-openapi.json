@@ -1,0 +1,147 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Alien Plugg — Tokenized Stocks & Crypto Analytics",
+    "description": "38 live endpoints covering Robinhood Chain tokenized stocks (NVDA, AAPL, TSLA + 90 more), Zora crypto analysis, on-chain intelligence, whale tracking, and utilities. Flat $0.003/call. Real-time data powered by x402 micropayments on Base.",
+    "version": "2.2.0",
+    "contact": {
+      "name": "Alien Plugg",
+      "url": "https://github.com/michaelhutchings626-hub/alien-plugg-x402"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/michaelhutchings626-hub/alien-plugg-x402/blob/main/LICENSE"
+    }
+  },
+  "servers": [
+    { "url": "https://alien-plugg-proxy.onrender.com", "description": "Production" }
+  ],
+  "security": [
+    { "ApiKeyAuth": [] }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-RapidAPI-Key"
+      }
+    }
+  },
+  "paths": {
+    "/api?endpoint=rh-stock-prices": {
+      "get": { "tags": ["Stock Tokens"], "summary": "Live stock token prices", "description": "Live bid/ask for 90+ tokenized stocks (NVDA, AAPL, TSLA, GOOGL, MSFT)", "parameters": [{ "name": "symbol", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Stock ticker (e.g. NVDA)" }] }
+    },
+    "/api?endpoint=rh-stock-list": {
+      "get": { "tags": ["Stock Tokens"], "summary": "Full stock token catalog", "description": "All tokenized stocks with contract addresses, multipliers, and trading capabilities" }
+    },
+    "/api?endpoint=rh-corporate-actions": {
+      "get": { "tags": ["Stock Tokens"], "summary": "Corporate actions", "description": "Splits, dividends, mergers for stock token holders" }
+    },
+    "/api?endpoint=rh-stock-screener": {
+      "get": { "tags": ["Stock Tokens"], "summary": "Stock token screener", "description": "Screen and rank by volume, tradability, extended hours", "parameters": [{ "name": "sort", "in": "query", "schema": { "type": "string" } }, { "name": "limit", "in": "query", "schema": { "type": "integer" } }] }
+    },
+    "/api?endpoint=rh-dex-scanner": {
+      "get": { "tags": ["Stock Tokens"], "summary": "Robinhood Chain DEX scanner", "description": "Block activity, gas prices, tx counts on chain ID 4663" }
+    },
+    "/api?endpoint=robinhood-scanner": {
+      "get": { "tags": ["Stock Tokens"], "summary": "Trending Robinhood tokens", "description": "Trending Robinhood Chain tokens with BUY/SELL signals" }
+    },
+    "/api?endpoint=zora-scanner": {
+      "get": { "tags": ["Crypto"], "summary": "Zora trending scanner", "description": "Trending Zora coins with BUY/SELL/STRONG_BUY signals" }
+    },
+    "/api?endpoint=new-launches": {
+      "get": { "tags": ["Crypto"], "summary": "New token launches", "description": "Freshest token launches with age labels" }
+    },
+    "/api?endpoint=rug-check": {
+      "get": { "tags": ["Crypto"], "summary": "Rug risk check", "description": "0-100 rug risk score with verdict for any token", "parameters": [{ "name": "address", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=portfolio": {
+      "get": { "tags": ["Crypto"], "summary": "Wallet portfolio", "description": "Wallet holdings, PnL, allocation breakdown on Zora", "parameters": [{ "name": "address", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Wallet address (0x...)" }] }
+    },
+    "/api?endpoint=sentiment": {
+      "get": { "tags": ["Crypto"], "summary": "Social sentiment", "description": "Social sentiment across Twitter/Farcaster/TikTok for Zora coins", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=honeypot-check": {
+      "get": { "tags": ["Crypto"], "summary": "Honeypot detection", "description": "Detect honeypot/sell-trap contracts", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=holder-analysis": {
+      "get": { "tags": ["Crypto"], "summary": "Holder analysis", "description": "Top holders, Gini coefficient, concentration analysis", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=creator-lookup": {
+      "get": { "tags": ["Crypto"], "summary": "Creator lookup", "description": "Creator profiles, coins, social accounts", "parameters": [{ "name": "handle", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Creator handle (e.g. alienplugg)" }] }
+    },
+    "/api?endpoint=chart-roast": {
+      "get": { "tags": ["Crypto"], "summary": "Chart roast", "description": "Technical analysis with brutal chart roasting", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=token-compare": {
+      "get": { "tags": ["Crypto"], "summary": "Token comparison", "description": "Side-by-side token comparison with reasoning", "parameters": [{ "name": "a", "in": "query", "required": true, "schema": { "type": "string" }, "description": "First token address" }, { "name": "b", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Second token address" }] }
+    },
+    "/api?endpoint=token-price": {
+      "get": { "tags": ["On-Chain"], "summary": "Token price (CoinGecko)", "description": "CoinGecko prices for any token", "parameters": [{ "name": "symbol", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token symbol (e.g. BTC)" }] }
+    },
+    "/api?endpoint=whale-tracker": {
+      "get": { "tags": ["On-Chain"], "summary": "Whale tracker", "description": "Large whale transfer detection on Base", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=smart-money": {
+      "get": { "tags": ["On-Chain"], "summary": "Smart money", "description": "Smart money wallet tracking", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=wallet-profile": {
+      "get": { "tags": ["On-Chain"], "summary": "Wallet profile", "description": "ETH/USDC balance, tx count, behavioral label", "parameters": [{ "name": "address", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Wallet address (0x...)" }] }
+    },
+    "/api?endpoint=gas-tracker": {
+      "get": { "tags": ["On-Chain"], "summary": "Gas tracker", "description": "Gas prices on Base, Ethereum, Arbitrum, Optimism, Polygon", "parameters": [{ "name": "chain", "in": "query", "schema": { "type": "string" }, "description": "Chain name (base, ethereum, arbitrum, optimism, polygon)" }] }
+    },
+    "/api?endpoint=tx-status": {
+      "get": { "tags": ["On-Chain"], "summary": "Transaction status", "description": "Transaction confirmation status + gas cost", "parameters": [{ "name": "tx", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Transaction hash (0x...)" }, { "name": "chain", "in": "query", "schema": { "type": "string" }, "description": "Chain name (default: base)" }] }
+    },
+    "/api?endpoint=builder-score": {
+      "get": { "tags": ["On-Chain"], "summary": "Builder score", "description": "AI-powered builder reputation score", "parameters": [{ "name": "handle", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Builder handle" }] }
+    },
+    "/api?endpoint=price-alerts": {
+      "get": { "tags": ["Alerts"], "summary": "Price alerts", "description": "Set/check price alerts for Zora tokens", "parameters": [{ "name": "action", "in": "query", "schema": { "type": "string" }, "description": "Action: list, create, check" }] }
+    },
+    "/api?endpoint=whale-alert": {
+      "get": { "tags": ["Alerts"], "summary": "Whale alerts", "description": "Whale movement alerts", "parameters": [{ "name": "action", "in": "query", "schema": { "type": "string" }, "description": "Action: list, create, check" }] }
+    },
+    "/api?endpoint=rug-alert": {
+      "get": { "tags": ["Alerts"], "summary": "Rug alerts", "description": "Rug risk alerts", "parameters": [{ "name": "action", "in": "query", "schema": { "type": "string" }, "description": "Action: list, create, check" }] }
+    },
+    "/api?endpoint=launch-alert": {
+      "get": { "tags": ["Alerts"], "summary": "Launch alerts", "description": "New launch alerts", "parameters": [{ "name": "action", "in": "query", "schema": { "type": "string" }, "description": "Action: list, create, check" }] }
+    },
+    "/api?endpoint=translate": {
+      "get": { "tags": ["Utilities"], "summary": "Translate", "description": "100+ languages via Google Translate", "parameters": [{ "name": "text", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Text to translate" }, { "name": "target", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Target language code (es, fr, ja...)" }] }
+    },
+    "/api?endpoint=ip-info": {
+      "get": { "tags": ["Utilities"], "summary": "IP info", "description": "IP geolocation + proxy/VPN detection", "parameters": [{ "name": "ip", "in": "query", "schema": { "type": "string" }, "description": "IP address (defaults to caller)" }] }
+    },
+    "/api?endpoint=expand-url": {
+      "get": { "tags": ["Utilities"], "summary": "Expand URL", "description": "Follow redirects, resolve final URL", "parameters": [{ "name": "url", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Short URL to expand" }] }
+    },
+    "/api?endpoint=tech-stack": {
+      "get": { "tags": ["Utilities"], "summary": "Tech stack detect", "description": "Website technology fingerprinting", "parameters": [{ "name": "url", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Website URL" }] }
+    },
+    "/api?endpoint=webpage-diff": {
+      "get": { "tags": ["Utilities"], "summary": "Webpage diff", "description": "Monitor webpage changes", "parameters": [{ "name": "url", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Website URL" }] }
+    },
+    "/api?endpoint=daily-alpha": {
+      "get": { "tags": ["Premium"], "summary": "Daily alpha report", "description": "Daily curated picks, signals, rug warnings, DCA recommendation" }
+    },
+    "/api?endpoint=pro-alpha": {
+      "get": { "tags": ["Premium"], "summary": "Pro alpha report", "description": "Pro report with RSI, MACD, support/resistance, portfolio actions" }
+    },
+    "/api?endpoint=dex-flow": {
+      "get": { "tags": ["On-Chain"], "summary": "DEX flow analysis", "description": "Uniswap V3 liquidity flow analysis on Base", "parameters": [{ "name": "token", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Token address (0x...)" }] }
+    },
+    "/api?endpoint=discovery": {
+      "get": { "tags": ["Discovery"], "summary": "Discovery catalog", "description": "Full endpoint catalog as JSON" }
+    },
+    "/api?endpoint=mcp-handshake": {
+      "get": { "tags": ["Discovery"], "summary": "MCP handshake", "description": "MCP protocol handshake + tool discovery" }
+    },
+    "/api?endpoint=mcp-server": {
+      "post": { "tags": ["Discovery"], "summary": "MCP server", "description": "MCP tools/call endpoint" }
+    }
+  }
+}
