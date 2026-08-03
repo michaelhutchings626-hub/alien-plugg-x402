@@ -1,208 +1,384 @@
 openapi: 3.0.3
 info:
-  title: Alien Plugg — Crypto & Stock Token API
+  title: Alien Plugg — Tokenized Stocks & Crypto Analytics
+  description: |
+    ## The first API for Robinhood Chain tokenized stocks + Zora crypto analytics
+    
+    32 tested endpoints covering:
+    - **Robinhood Chain stock tokens** — 96 tokenized equities (AAPL, NVDA, TSLA, etc.) with live bid/ask, screener, DEX scanner, and corporate actions
+    - **Zora crypto analysis** — trending scanner, rug checks, honeypot detection, holder analysis, sentiment, portfolio tracking
+    - **On-chain intelligence** — whale tracking, smart money flows, DEX flow analysis, wallet profiling, builder scores
+    - **Utilities** — translation, IP info, URL expansion, tech stack detection, gas tracking
+    
+    All data is live and updated in real-time. Powered by x402 micropayments on Base.
   version: 2.0.0
-  description: >
-    32 API endpoints covering Robinhood Chain stock tokens (NVDA, AAPL, TSLA),
-    Zora crypto analysis, on-chain intelligence, and utilities.
-    
-    Unique offering: Live prices for 90+ tokenized stocks on Robinhood Chain.
-    
-    Categories:
-    • Robinhood Chain Stock Tokens (5) — prices, catalog, corporate actions, screener, DEX scanner
-    • Zora Crypto Analysis (11) — scanner, rug check, sentiment, portfolio, honeypot, holders
-    • On-Chain Intelligence (10) — whale tracker, smart money, DEX flow, gas, wallet profile
-    • Utilities (6) — translate, IP info, URL expansion, tech stack, webpage diff, alerts
-    • Premium Alpha (2) — daily curated trading signals + pro tier
   contact:
     name: Alien Plugg
-    url: https://app.base44.com/superagent/6a5fdd57651262e86b24133e
+    url: https://base44.app/api/apps/6a5fdd57651262e86b24133e/files/mp/public/6a5fdd57651262e86b24133e/1a205d56c_landing-page.html
   license:
     name: MIT
     url: https://github.com/michaelhutchings626-hub/alien-plugg-x402/blob/main/LICENSE
-
 servers:
-  - url: https://YOUR-PROXY.onrender.com
-    description: Production proxy (replace with your Render URL)
-
-security:
-  - RapidAPIKey: []
-
-components:
-  securitySchemes:
-    RapidAPIKey:
-      type: apiKey
-      in: header
-      name: X-RapidAPI-Key
-      description: Your RapidAPI API key (automatically added by RapidAPI)
-
+  - url: https://alien-plugg-proxy.onrender.com
+    description: Alien Plugg x402 Proxy
 tags:
-  - name: Stock Tokens
-    description: Robinhood Chain tokenized stock data (NVDA, AAPL, TSLA, GOOGL)
-  - name: Crypto
-    description: Zora and Robinhood Chain crypto token analysis
+  - name: Robinhood Stock Tokens
+    description: Tokenized equities on Robinhood Chain (chainId 4663)
+  - name: Zora Crypto
+    description: Zora network coin scanning and analysis
   - name: On-Chain
-    description: On-chain intelligence for Base
-  - name: Utility
-    description: General utility APIs
+    description: Blockchain data, whale tracking, and wallet analysis
+  - name: Utilities
+    description: General-purpose utility endpoints
   - name: Premium
-    description: Premium curated alpha and signals
+    description: High-value curated alpha and alerts
 
 paths:
-  /api:
+  /api?endpoint=rh-stock-prices:
     get:
-      tags: [Stock Tokens, Crypto, On-Chain, Utility, Premium]
-      summary: Call any Alien Plugg endpoint
-      description: >
-        Universal endpoint — pass the endpoint name and parameters.
-        RapidAPI users don't need crypto — the proxy handles USDC payments.
-        
-        Example: GET /api?endpoint=gas-tracker
-        Example: GET /api?endpoint=rh-stock-prices&symbol=NVDA
-        Example: GET /api?endpoint=zora-scanner&limit=10
-      operationId: callEndpoint
+      tags: [Robinhood Stock Tokens]
+      summary: Get live stock token prices
+      description: "Live bid/ask/spread/volume for any Robinhood tokenized stock. 96 tokens available including AAPL, NVDA, TSLA, AMZN, GOOGL, META, MSFT and more."
+      operationId: rhStockPrices
       parameters:
-        - name: endpoint
-          in: query
-          required: true
-          schema:
-            type: string
-            enum:
-              # Stock Tokens
-              - rh-stock-prices
-              - rh-stock-list
-              - rh-corporate-actions
-              - rh-stock-screener
-              - rh-dex-scanner
-              # Crypto
-              - zora-scanner
-              - robinhood-scanner
-              - rug-check
-              - honeypot-check
-              - holder-analysis
-              - sentiment
-              - portfolio
-              - chart-roast
-              - new-launches
-              - creator-lookup
-              # On-Chain
-              - token-price
-              - token-compare
-              - whale-tracker
-              - smart-money
-              - dex-flow
-              - wallet-profile
-              - gas-tracker
-              - tx-status
-              - builder-score
-              # Utilities
-              - translate
-              - ip-info
-              - expand-url
-              - tech-stack
-              - webpage-diff
-              - price-alerts
-              # Premium
-              - daily-alpha
-              - pro-alpha
-          description: Which endpoint to call
-        # Common parameters passed through to the underlying x402 endpoint
         - name: symbol
           in: query
+          required: true
           schema: { type: string }
-          description: "Stock/crypto symbol (e.g. NVDA, AAPL, BTC)"
-        - name: token
-          in: query
+          description: Stock ticker symbol (e.g. AAPL, NVDA, TSLA)
+          example: AAPL
+        - name: x-rapidapi-key
+          in: header
+          required: true
           schema: { type: string }
-          description: "Token contract address (0x...)"
-        - name: address
-          in: query
-          schema: { type: string }
-          description: "Wallet address (0x...)"
-        - name: handle
-          in: query
-          schema: { type: string }
-          description: "Creator handle (e.g. @username)"
-        - name: wallet
-          in: query
-          schema: { type: string }
-          description: "Wallet address for portfolio lookup"
-        - name: text
-          in: query
-          schema: { type: string }
-          description: "Text to translate"
-        - name: to
-          in: query
-          schema: { type: string }
-          description: "Target language code (e.g. es, fr, de)"
-        - name: ip
-          in: query
-          schema: { type: string }
-          description: "IP address to look up"
-        - name: url
-          in: query
-          schema: { type: string }
-          description: "URL for expand-url or tech-stack"
-        - name: query
-          in: query
-          schema: { type: string }
-          description: "Search query for token-price"
-        - name: limit
-          in: query
-          schema: { type: integer, default: 10 }
-          description: "Max results"
-        - name: sort
-          in: query
-          schema: { type: string }
-          description: "Sort by (volume, marketCap, change, spread, price)"
-        - name: minVolume
-          in: query
-          schema: { type: number }
-          description: "Minimum volume filter"
-        - name: blocks
-          in: query
-          schema: { type: integer, default: 5 }
-          description: "Blocks to scan (rh-dex-scanner)"
-        - name: extendedHours
-          in: query
-          schema: { type: string }
-          description: "Set to 'true' for extended-hours tradable stocks only"
-        - name: allDay
-          in: query
-          schema: { type: string }
-          description: "Set to 'true' for 24/5 tradable stocks only"
-        - name: tradable
-          in: query
-          schema: { type: string }
-          description: "Set to 'true' for only fractional-tradable stock tokens"
-        - name: filter
-          in: query
-          schema: { type: string }
-          description: "Filter stock tokens by symbol or name"
-        - name: type
-          in: query
-          schema: { type: string }
-          description: "Filter corporate actions by type (split, dividend, merger)"
+          description: Your RapidAPI API key
       responses:
         '200':
-          description: Successful response with data from the x402 endpoint
+          description: Live price data
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  endpoint:
-                    type: string
-                    description: Which endpoint was called
-                  category:
-                    type: string
-                    description: Endpoint category
+                  endpoint: { type: string }
+                  category: { type: string }
                   data:
                     type: object
-                    description: The actual response data from the endpoint
-        '401':
-          description: Missing or invalid RapidAPI key
-        '429':
-          description: Monthly rate limit exceeded for your tier
-        '502':
-          description: x402 payment failed — proxy wallet may need USDC top-up
+                    properties:
+                      symbol: { type: string, example: "AAPL" }
+                      name: { type: string, example: "Apple • Robinhood Token" }
+                      bid: { type: string, example: "307.9" }
+                      ask: { type: string, example: "308.1" }
+                      mid: { type: string, example: "308.00" }
+                      spread: { type: string, example: "0.20" }
+                      currency: { type: string, example: "USD" }
+                      dailyVolume: { type: string, example: "207608" }
+                      tradingHalt: { type: boolean, example: false }
+                      contractAddress: { type: string }
+                      chainId: { type: integer, example: 4663 }
+
+  /api?endpoint=rh-stock-list:
+    get:
+      tags: [Robinhood Stock Tokens]
+      summary: List all tokenized stocks
+      description: "Complete list of all 96 tokenized stocks on Robinhood Chain with contract addresses, multipliers, and status."
+      operationId: rhStockList
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Full token list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      total: { type: integer, example: 96 }
+                      chain: { type: string, example: "Robinhood Chain" }
+                      tokens:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            symbol: { type: string, example: "AAPL" }
+                            name: { type: string }
+                            status: { type: string, example: "ACTIVE" }
+                            contractAddress: { type: string }
+
+  /api?endpoint=rh-corporate-actions:
+    get:
+      tags: [Robinhood Stock Tokens]
+      summary: Corporate actions for stock tokens
+      description: "Dividends, stock splits, and other corporate actions for tokenized stocks on Robinhood Chain."
+      operationId: rhCorporateActions
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          schema: { type: string }
+          description: Filter by stock symbol
+          example: TSLA
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Corporate actions list
+
+  /api?endpoint=rh-stock-screener:
+    get:
+      tags: [Robinhood Stock Tokens]
+      summary: Screen tokenized stocks
+      description: "Filter Robinhood Chain tokens by volume, price, and other criteria. Returns sorted results."
+      operationId: rhStockScreener
+      parameters:
+        - name: minVolume
+          in: query
+          required: false
+          schema: { type: integer }
+          description: Minimum daily volume threshold
+          example: 100000
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Filtered token list sorted by volume
+
+  /api?endpoint=rh-dex-scanner:
+    get:
+      tags: [Robinhood Stock Tokens]
+      summary: DEX activity scanner for Robinhood Chain
+      description: "Scan Uniswap v4 DEX activity on Robinhood Chain. Shows recent blocks, transactions, and gas utilization."
+      operationId: rhDexScanner
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          schema: { type: string }
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: DEX activity data
+
+  /api?endpoint=zora-scanner:
+    get:
+      tags: [Zora Crypto]
+      summary: Zora trending scanner
+      description: "Scan Zora for trending coins, price spikes, and BUY/SELL/STRONG_BUY signals."
+      operationId: zoraScanner
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Trending coins with trading signals
+
+  /api?endpoint=robinhood-scanner:
+    get:
+      tags: [Zora Crypto]
+      summary: Robinhood Chain crypto scanner
+      description: "Scan Robinhood Chain for trending tokens and trading signals."
+      operationId: robinhoodScanner
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Trending tokens with signals
+
+  /api?endpoint=rug-check:
+    get:
+      tags: [Zora Crypto]
+      summary: Rug pull check
+      description: "Check any token for rug pull risk. Analyzes liquidity, holder concentration, and contract safety."
+      operationId: rugCheck
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+          description: Token contract address
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Rug risk assessment
+
+  /api?endpoint=honeypot-check:
+    get:
+      tags: [Zora Crypto]
+      summary: Honeypot detection
+      description: "Detect if a token is a honeypot (buy-only, can't sell)."
+      operationId: honeypotCheck
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Honeypot analysis
+
+  /api?endpoint=holder-analysis:
+    get:
+      tags: [Zora Crypto]
+      summary: Token holder analysis
+      description: "Analyze holder distribution, concentration, and top wallets for any token."
+      operationId: holderAnalysis
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Holder distribution analysis
+
+  /api?endpoint=sentiment:
+    get:
+      tags: [Zora Crypto]
+      summary: Market sentiment analysis
+      description: "AI-powered sentiment analysis for any token or creator on Zora."
+      operationId: sentiment
+      parameters:
+        - name: address
+          in: query
+          required: false
+          schema: { type: string }
+        - name: creator
+          in: query
+          required: false
+          schema: { type: string }
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Sentiment score and analysis
+
+  /api?endpoint=whale-tracker:
+    get:
+      tags: [On-Chain]
+      summary: Whale transaction tracker
+      description: "Track large transactions and whale wallet movements on Base."
+      operationId: whaleTracker
+      parameters:
+        - name: minUsd
+          in: query
+          required: false
+          schema: { type: number }
+          description: Minimum USD value
+          example: 100000
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Recent whale transactions
+
+  /api?endpoint=smart-money:
+    get:
+      tags: [On-Chain]
+      summary: Smart money tracker
+      description: "Track smart money wallet flows and identify where profitable wallets are deploying capital."
+      operationId: smartMoney
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Smart money flow data
+
+  /api?endpoint=dex-flow:
+    get:
+      tags: [On-Chain]
+      summary: DEX flow analysis
+      description: "Real-time DEX liquidity flow analysis across major exchanges on Base."
+      operationId: dexFlow
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: DEX flow data
+
+  /api?endpoint=token-price:
+    get:
+      tags: [On-Chain]
+      summary: Token price lookup
+      description: "Get current price, market cap, and 24h change for any token on Base."
+      operationId: tokenPrice
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Token price data
+
+  /api?endpoint=gas-tracker:
+    get:
+      tags: [On-Chain]
+      summary: Gas price tracker
+      description: "Current gas prices on Base with estimated costs for common transaction types."
+      operationId: gasTracker
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Gas price data
+
+  /api?endpoint=daily-alpha:
+    get:
+      tags: [Premium]
+      summary: Daily alpha report
+      description: "Curated daily alpha report with top opportunities across Zora, Robinhood Chain, and Base."
+      operationId: dailyAlpha
+      parameters:
+        - name: x-rapidapi-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Daily alpha report
