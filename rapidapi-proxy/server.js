@@ -80,6 +80,7 @@ const ENDPOINTS = {
 
 // --- Rate Limiting ---
 const usage = new Map();
+const startTime = Date.now();
 const TIERS = {
   free:       { monthly: 100,  label: "Free" },
   basic:      { monthly: 1000, label: "Basic" },
@@ -96,9 +97,96 @@ function checkRateLimit(apiKey) {
   const monthMs = 30 * 24 * 60 * 60 * 1000;
   if (!usage.has(apiKey)) usage.set(apiKey, { count: 0, resetTime: now + monthMs });
   const record = usage.get(apiKey);
-  if (now > record.resetTime) { record.count = 0; record.resetTime = now + monthMs; }
+  if (now > record.resetTime) { record.count = 0; resetTime = now + monthMs; }
   return record;
 }
+
+// --- Health Check ---
+async function getWalletBalance() {
+  try {
+    const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+    const RPC = "https://mainnet.base.org";
+    const balanceRes = await fetch(RPC, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "eth_call",
+        params: [{ to: USDC, data: `0x70a08231000000000000000000000000${account.address.slice(2)}` }, "latest"],
+        id: 1,
+      }),
+    });
+    const balanceData = await balanceRes.json();
+    return parseInt(balanceData.result, 16) / 1e6;
+  } catch {
+    return null;
+  }
+}
+
+async function checkUpstreamHealth() {
+  try {
+    const response = await fetch(`${BANKR_BASE}/discovery`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(5000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+// Public health endpoint — no auth needed
+app.get("/health", async (req, res) => {
+  const uptimeSec = Math.floor((Date.now() - startTime) / 1000);
+  const totalCalls = Array.from(usage.values()).reduce((sum, r) => sum + r.count, 0);
+
+  // Check upstream in parallel
+  const [usdcBalance, upstreamOk] = await Promise.all([getWalletBalance(), checkUpstreamHealth()]);
+
+  const categories = {};
+  for (const [name, info] of Object.entries(ENDPOINTS)) {
+    if (!categories[info.cat]) categories[info.cat] = [];
+    categories[info.cat].push(name);
+  }
+
+  res.json({
+    status: upstreamOk ? "ok" : "degraded",
+    service: "Alien Plugg x402 Proxy",
+    version: "2.1.0",
+    timestamp: new Date().toISOString(),
+    uptime: {
+      seconds: uptimeSec,
+      human: `${Math.floor(uptimeSec / 3600)}h ${Math.floor((uptimeSec % 3600) / 60)}m ${uptimeSec % 60}s`,
+    },
+    wallet: {
+      address: account.address,
+      usdcBalance: usdcBalance !== null ? `$${usdcBalance.toFixed(2)}` : "unavailable",
+      funded: usdcBalance !== null && usdcBalance > 0.01,
+    },
+    upstream: {
+      url: BANKR_BASE,
+      status: upstreamOk ? "online" : "offline",
+    },
+    endpoints: {
+      total: Object.keys(ENDPOINTS).length,
+      categories: Object.fromEntries(
+        Object.entries(categories).map(([cat, names]) => ({ [cat]: names.length }))
+      ),
+    },
+    usage: {
+      totalCalls,
+      activeKeys: usage.size,
+    },
+    pricing: {
+      min: "$0.0015 USDC",
+      max: "$0.25 USDC",
+      tiers: Object.fromEntries(
+        Object.entries(TIERS).map(([k, v]) => [k, `${v.monthly} calls/mo`])
+      ),
+    },
+  });
+});
 
 // --- Routes ---
 
@@ -108,7 +196,9 @@ app.get("/", (req, res) => {
     service: "Alien Plugg x402 Proxy",
     wallet: account.address,
     endpoints: Object.keys(ENDPOINTS).length,
-    version: "2.0.0",
+    version: "2.1.0",
+    health: "/health",
+    docs: "/endpoints",
   });
 });
 
@@ -218,36 +308,19 @@ app.get("/admin/balance", async (req, res) => {
   if (req.headers["x-admin-key"] !== process.env.ADMIN_KEY) {
     return res.status(403).json({ error: "Forbidden" });
   }
-  try {
-    const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-    const RPC = "https://mainnet.base.org";
-    const balanceRes = await fetch(RPC, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        method: "eth_call",
-        params: [{ to: USDC, data: `0x70a08231000000000000000000000000${account.address.slice(2)}` }, "latest"],
-        id: 1,
-      }),
-    });
-    const balanceData = await balanceRes.json();
-    const balance = parseInt(balanceData.result, 16) / 1e6;
-
-    res.json({
-      wallet: account.address,
-      usdcBalance: `$${balance.toFixed(2)}`,
-      totalCalls: Array.from(usage.values()).reduce((sum, r) => sum + r.count, 0),
-      activeKeys: usage.size,
-      endpoints: Object.keys(ENDPOINTS).length,
-    });
-  } catch (error) {
-    res.json({ wallet: account.address, error: "Could not fetch balance" });
-  }
+  const balance = await getWalletBalance();
+  res.json({
+    wallet: account.address,
+    usdcBalance: balance !== null ? `$${balance.toFixed(2)}` : "unavailable",
+    totalCalls: Array.from(usage.values()).reduce((sum, r) => sum + r.count, 0),
+    activeKeys: usage.size,
+    endpoints: Object.keys(ENDPOINTS).length,
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Alien Plugg x402 Proxy running on port ${PORT}`);
   console.log(`💰 Proxy wallet: ${account.address}`);
   console.log(`📡 ${Object.keys(ENDPOINTS).length} endpoints available`);
+  console.log(`❤️  Health check: /health`);
 });
