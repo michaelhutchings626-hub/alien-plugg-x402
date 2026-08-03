@@ -1,12 +1,26 @@
-# Alien Plugg x402 API Skill
+---
+name: alien-plugg-x402
+description: "38 paid x402 API endpoints for AI agents — Zora crypto analysis, Robinhood Chain tokenized stocks, on-chain intelligence, whale tracking, and utilities. MCP-compatible. Flat $0.003/call via USDC micropayments on Base."
+tags: [x402, crypto, zora, robinhood, stocks, defi, trading, base, mcp, api, whale, sentiment, rug-check]
+version: 2
+visibility: public
+metadata:
+  clawdbot:
+    emoji: "👽"
+    homepage: "https://github.com/michaelhutchings626-hub/alien-plugg-x402"
+    requires:
+      bins: [curl]
+---
 
-## Description
+# Alien Plugg x402 API
 
-Alien Plugg's cosmic x402 API toolkit — 38 paid endpoints covering Zora crypto analysis, Robinhood Chain tokenized stocks, on-chain intelligence, and utilities. MCP-compatible with 10 curated tools for AI agents. All payments are automatic via the x402 protocol (USDC on Base). Flat $0.003/call across all endpoints.
+> What I have is outta this world 👽🌌
+
+38 paid x402 API endpoints for AI agents. Covers Zora crypto analysis, Robinhood Chain tokenized stocks, on-chain intelligence, and utilities. MCP-compatible with 10 curated tools. Flat $0.003/call via automatic USDC micropayments on Base.
 
 ## Installation
 
-Point your AI agent to the discovery endpoint or MCP server:
+Point your agent at the discovery endpoint or MCP server:
 
 ### MCP Server (For Claude, Cursor, and MCP-compatible agents)
 
@@ -33,7 +47,7 @@ Base URL: `https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/`
 | Endpoint | Price | Params | Description |
 |----------|-------|--------|-------------|
 | rh-stock-prices | $0.003 | `symbol` (e.g. NVDA) | Live bid/ask for 90+ tokenized stocks |
-| rh-stock-list | $0.003 | none | Full catalog with contract addresses, multipliers, trading capabilities |
+| rh-stock-list | $0.003 | none | Full catalog with contract addresses, multipliers |
 | rh-corporate-actions | $0.003 | none | Splits, dividends, mergers for stock token holders |
 | rh-stock-screener | $0.003 | `sort`, `limit` (optional) | Screen/rank by volume, tradability, extended hours |
 | rh-dex-scanner | $0.003 | none | Block activity, gas prices, tx counts on chain ID 4663 |
@@ -114,9 +128,6 @@ curl "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/zora-rug
 # Get wallet profile
 curl "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/wallet-profile?address=0x..."
 
-# Track whale movements
-curl "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/whale-tracker?token=0x..."
-
 # Daily alpha report
 curl "https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/alien-plugg-alpha"
 ```
@@ -137,24 +148,14 @@ Add to your MCP config:
 
 The MCP server handles initialize, tools/list, and resources/list for free. Only tools/call requires USDC payment (automatic via x402 protocol).
 
-## Bankr Wallet
-
-- **Wallet:** 0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d
-- **Network:** Base (chain ID 8453)
-- **Currency:** USDC
-- **Payment:** Automatic via x402 protocol — no manual signing needed
-
 ## Tokens
-
 - **PLUGG on Base (v2):** 0xDe76415CeBe959CF0738e8A636d9153fF295bba3
 - **PLUGG on Base (v1):** 0x2475438eA40592D0c865Cd4DB16a2caa1367bBa3
 - **PLUGG on Robinhood:** 0x09d56eaCb69E85Dca856B6dc15fA6aE9eeaBFBa3
 
 ## Links
-
+- **GitHub:** https://github.com/michaelhutchings626-hub/alien-plugg-x402
 - **Discovery:** https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery
 - **MCP Server:** https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/mcp-server
-- **GitHub:** https://github.com/michaelhutchings626-hub/alien-plugg-x402
 - **Chat:** https://app.base44.com/superagent/6a5fdd57651262e86b24133e
-- **Landing Page:** https://base44.app/api/apps/6a5fdd57651262e86b24133e/files/mp/public/6a5fdd57651262e86b24133e/1a205d56c_landing-page.html
 - **llms.txt:** https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery?format=llms
