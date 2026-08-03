@@ -1,0 +1,536 @@
+openapi: 3.0.3
+info:
+  title: Alien Plugg x402 API
+  description: |
+    30 pay-per-call crypto analysis endpoints using x402 USDC micropayments on Base.
+    
+    All paid endpoints use the x402 protocol:
+    1. Client sends request → server returns HTTP 402 with payment requirements
+    2. Client pays USDC on Base → retries request with payment proof
+    3. Server validates payment → returns data
+    
+    Free endpoints: discovery, mcp-handshake
+    
+    MCP server with 10 tools available for Claude, Cursor, and other AI agents.
+  version: 2.0.0
+  contact:
+    name: Alien Plugg
+    url: https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d/discovery
+  license:
+    name: MIT
+    url: https://github.com/michaelhutchings626-hub/alien-plugg-x402/blob/main/LICENSE
+servers:
+  - url: https://x402.bankr.bot/0xabf922abb2a9e782f0b187d5d1ab24deb4870c3d
+    description: Bankr x402 Gateway (Base)
+tags:
+  - name: Discovery
+    description: Free endpoints for catalog and protocol discovery
+  - name: Crypto Analysis
+    description: Zora and on-chain token analysis tools
+  - name: On-Chain
+    description: Blockchain data and wallet analysis
+  - name: Utilities
+    description: General-purpose utility endpoints
+  - name: Premium
+    description: High-value curated analysis and alerts
+  - name: MCP
+    description: Model Context Protocol server
+
+paths:
+  /discovery:
+    get:
+      tags: [Discovery]
+      summary: Discover all endpoints
+      description: Returns full catalog of all endpoints as JSON. Use ?format=llms for llms.txt format.
+      operationId: discovery
+      parameters:
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, llms]
+          description: Response format (json or llms.txt)
+      responses:
+        '200':
+          description: Full endpoint catalog
+        '402':
+          description: Payment required (this endpoint is FREE)
+
+  /zora-scanner:
+    get:
+      tags: [Crypto Analysis]
+      summary: Zora trending scanner
+      description: "Scan Zora for trending coins, price spikes, and trading signals. Returns top movers with market cap, volume, 24h change, and BUY/SELL/STRONG_BUY signals. Price: $0.01 USDC"
+      operationId: zoraScanner
+      responses:
+        '200': { description: Trending coins with signals }
+        '402': { description: Payment required — $0.01 USDC on Base }
+
+  /robinhood-scanner:
+    get:
+      tags: [Crypto Analysis]
+      summary: Robinhood Chain scanner
+      description: "Scan Robinhood Chain for trending tokens, price spikes, and trading signals. Price: $0.01 USDC"
+      operationId: robinhoodScanner
+      responses:
+        '200': { description: Trending tokens with signals }
+        '402': { description: Payment required — $0.01 USDC }
+
+  /zora-rug-check:
+    get:
+      tags: [Crypto Analysis]
+      summary: Rug risk analysis
+      description: "Rug risk analysis for any Zora coin. Returns 0-100 risk score with LOW/MEDIUM/HIGH/CRITICAL verdict. Price: $0.02 USDC"
+      operationId: zoraRugCheck
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+          description: Token contract address
+      responses:
+        '200': { description: Risk score and verdict }
+        '402': { description: Payment required — $0.02 USDC }
+
+  /honeypot-check:
+    get:
+      tags: [Crypto Analysis]
+      summary: Honeypot detector
+      description: "Detect if a token is a honeypot (can't sell). Returns buy/sell tax, honeypot status, and liquidity lock info. Price: $0.04 USDC"
+      operationId: honeypotCheck
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Honeypot analysis }
+        '402': { description: Payment required — $0.04 USDC }
+
+  /holder-analysis:
+    get:
+      tags: [Crypto Analysis]
+      summary: Holder concentration analysis
+      description: "Holder concentration + Gini coefficient for any token. Detects whale dominance and distribution health. Price: $0.03 USDC"
+      operationId: holderAnalysis
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Holder distribution analysis }
+        '402': { description: Payment required — $0.03 USDC }
+
+  /zora-sentiment:
+    get:
+      tags: [Crypto Analysis]
+      summary: Social sentiment scoring
+      description: "Social sentiment scoring for Zora creator coins. Returns 0-100 composite score with ACCUMULATE/HOLD/REDUCE recommendation. Price: $0.05 USDC"
+      operationId: zoraSentiment
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Sentiment score and recommendation }
+        '402': { description: Payment required — $0.05 USDC }
+
+  /zora-portfolio:
+    get:
+      tags: [Crypto Analysis]
+      summary: Portfolio snapshot
+      description: "Token portfolio snapshot for any Zora wallet. Returns holdings, market values, PnL, and allocation. Price: $0.005 USDC"
+      operationId: zoraPortfolio
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Portfolio with PnL }
+        '402': { description: Payment required — $0.005 USDC }
+
+  /token-price:
+    get:
+      tags: [Crypto Analysis]
+      summary: Token price lookup
+      description: "Crypto token price via CoinGecko. Lookup by id, symbol, or contract address. Returns USD price, 24h/7d change, market cap, volume. Price: $0.015 USDC"
+      operationId: tokenPrice
+      parameters:
+        - name: symbol
+          in: query
+          schema: { type: string }
+          description: Token symbol (e.g. BTC, ETH)
+        - name: id
+          in: query
+          schema: { type: string }
+          description: CoinGecko coin id
+        - name: address
+          in: query
+          schema: { type: string }
+          description: Contract address
+      responses:
+        '200': { description: Price data }
+        '402': { description: Payment required — $0.015 USDC }
+
+  /token-compare:
+    get:
+      tags: [Crypto Analysis]
+      summary: Side-by-side token comparison
+      description: "Compare two tokens side-by-side with winner verdict. Price: $0.005 USDC"
+      operationId: tokenCompare
+      parameters:
+        - name: a
+          in: query
+          required: true
+          schema: { type: string }
+          description: First token address
+        - name: b
+          in: query
+          required: true
+          schema: { type: string }
+          description: Second token address
+      responses:
+        '200': { description: Comparison with winner }
+        '402': { description: Payment required — $0.005 USDC }
+
+  /chart-roast:
+    get:
+      tags: [Crypto Analysis]
+      summary: Brutal chart analysis
+      description: "Brutal chart analysis + technical signals (RSI, MACD, support/resistance). Price: $0.008 USDC"
+      operationId: chartRoast
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Chart analysis with signals }
+        '402': { description: Payment required — $0.008 USDC }
+
+  /new-launches:
+    get:
+      tags: [Crypto Analysis]
+      summary: Newest Zora launches
+      description: "Newest Zora token launches with market cap and volume. Price: $0.01 USDC"
+      operationId: newLaunches
+      responses:
+        '200': { description: Recent token launches }
+        '402': { description: Payment required — $0.01 USDC }
+
+  /creator-lookup:
+    get:
+      tags: [Crypto Analysis]
+      summary: Creator profile lookup
+      description: "Creator profile + all their coins on Zora. Price: $0.01 USDC"
+      operationId: creatorLookup
+      parameters:
+        - name: handle
+          in: query
+          required: true
+          schema: { type: string }
+          description: Creator handle (e.g. @username)
+      responses:
+        '200': { description: Creator profile and coins }
+        '402': { description: Payment required — $0.01 USDC }
+
+  /whale-tracker:
+    get:
+      tags: [On-Chain]
+      summary: Whale transfer tracker
+      description: "Track large whale transfers on Base. Price: $0.08 USDC"
+      operationId: whaleTracker
+      parameters:
+        - name: token
+          in: query
+          schema: { type: string }
+          description: Token address to filter
+        - name: minAmount
+          in: query
+          schema: { type: number }
+          description: Minimum transfer amount
+      responses:
+        '200': { description: Whale transfers }
+        '402': { description: Payment required — $0.08 USDC }
+
+  /smart-money:
+    get:
+      tags: [On-Chain]
+      summary: Smart money tracker
+      description: "Track smart money wallets on Base. See what successful wallets are buying/selling. Price: $0.08 USDC"
+      operationId: smartMoney
+      parameters:
+        - name: token
+          in: query
+          schema: { type: string }
+      responses:
+        '200': { description: Smart money activity }
+        '402': { description: Payment required — $0.08 USDC }
+
+  /dex-flow:
+    get:
+      tags: [On-Chain]
+      summary: DEX liquidity flow
+      description: "Uniswap V3 pool liquidity changes, volume, and TVL on Base. Price: $0.12 USDC"
+      operationId: dexFlow
+      responses:
+        '200': { description: Liquidity flow analysis }
+        '402': { description: Payment required — $0.12 USDC }
+
+  /wallet-profile:
+    get:
+      tags: [On-Chain]
+      summary: Wallet profiler
+      description: "On-chain wallet profiler for Base. Returns ETH/USDC balance, tx count, behavioral label. Price: $0.003 USDC"
+      operationId: walletProfile
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Wallet profile }
+        '402': { description: Payment required — $0.003 USDC }
+
+  /gas-tracker:
+    get:
+      tags: [On-Chain]
+      summary: Gas price tracker
+      description: "Real-time Base gas prices (slow, standard, fast, instant). Price: $0.002 USDC"
+      operationId: gasTracker
+      responses:
+        '200': { description: Current gas prices }
+        '402': { description: Payment required — $0.002 USDC }
+
+  /tx-status:
+    get:
+      tags: [On-Chain]
+      summary: Transaction status checker
+      description: "Check transaction status on Base or other chains. Price: $0.002 USDC"
+      operationId: txStatus
+      parameters:
+        - name: tx
+          in: query
+          required: true
+          schema: { type: string }
+          description: Transaction hash
+        - name: chain
+          in: query
+          schema: { type: string, default: base }
+      responses:
+        '200': { description: Transaction status }
+        '402': { description: Payment required — $0.002 USDC }
+
+  /price-alerts:
+    get:
+      tags: [Crypto Analysis]
+      summary: Price alert management
+      description: "Create and manage Zora token price alerts. Price: $0.008 USDC"
+      operationId: priceAlerts
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema: { type: string, enum: [create, list, delete] }
+        - name: address
+          in: query
+          schema: { type: string }
+        - name: above
+          in: query
+          schema: { type: number }
+        - name: below
+          in: query
+          schema: { type: number }
+      responses:
+        '200': { description: Alert created/listed/deleted }
+        '402': { description: Payment required — $0.008 USDC }
+
+  /translate:
+    get:
+      tags: [Utilities]
+      summary: Translation API
+      description: "Translation API supporting 100+ languages. Auto-detects source language. Price: $0.005 USDC"
+      operationId: translate
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema: { type: string }
+        - name: to
+          in: query
+          required: true
+          schema: { type: string }
+          description: Target language code (e.g. es, fr, ja)
+        - name: from
+          in: query
+          schema: { type: string }
+          description: Source language (auto-detect if omitted)
+      responses:
+        '200': { description: Translation result }
+        '402': { description: Payment required — $0.005 USDC }
+
+  /ip-info:
+    get:
+      tags: [Utilities]
+      summary: IP geolocation
+      description: "IP geolocation + VPN/proxy detection. Price: $0.0015 USDC"
+      operationId: ipInfo
+      parameters:
+        - name: ip
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Geolocation data }
+        '402': { description: Payment required — $0.0015 USDC }
+
+  /expand-url:
+    get:
+      tags: [Utilities]
+      summary: URL redirect tracer
+      description: "Follow redirect chain of a short URL to its final destination. Price: $0.015 USDC"
+      operationId: expandUrl
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Redirect chain }
+        '402': { description: Payment required — $0.015 USDC }
+
+  /tech-stack-detect:
+    get:
+      tags: [Utilities]
+      summary: Tech stack fingerprinting
+      description: "Detect technologies used by a website (framework, CMS, analytics, etc.). Price: $0.008 USDC"
+      operationId: techStackDetect
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Tech stack detected }
+        '402': { description: Payment required — $0.008 USDC }
+
+  /webpage-diff:
+    get:
+      tags: [Utilities]
+      summary: Webpage change monitor
+      description: "Monitor a webpage for changes and return a diff. Price: $0.03 USDC"
+      operationId: webpageDiff
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema: { type: string }
+        - name: hash
+          in: query
+          schema: { type: string }
+          description: Previous hash to compare against
+      responses:
+        '200': { description: Diff or no-change status }
+        '402': { description: Payment required — $0.03 USDC }
+
+  /builder-score:
+    get:
+      tags: [Utilities]
+      summary: Builder reputation score
+      description: "AI-powered builder score for any X/Base handle. Returns 0-100 score. Price: $0.008 USDC"
+      operationId: builderScore
+      parameters:
+        - name: handle
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Builder score }
+        '402': { description: Payment required — $0.008 USDC }
+
+  /alien-plugg-alpha:
+    get:
+      tags: [Premium]
+      summary: Daily alpha report
+      description: "Daily curated trading signals — top picks, rug warnings, DCA advice. Price: $0.05 USDC"
+      operationId: alienPluggAlpha
+      responses:
+        '200': { description: Daily alpha report }
+        '402': { description: Payment required — $0.05 USDC }
+
+  /alien-plugg-pro-alpha:
+    get:
+      tags: [Premium]
+      summary: PRO alpha report
+      description: "PRO tier alpha report with detailed wallet analysis, entry/exit targets, risk scores, and technical levels. Price: $0.25 USDC"
+      operationId: alienPluggProAlpha
+      responses:
+        '200': { description: Pro alpha report }
+        '402': { description: Payment required — $0.25 USDC }
+
+  /whale-alert:
+    get:
+      tags: [Premium]
+      summary: Whale movement alerts
+      description: "Real-time whale movement alerts on Base. Price: $0.015 USDC"
+      operationId: whaleAlert
+      responses:
+        '200': { description: Whale alerts }
+        '402': { description: Payment required — $0.015 USDC }
+
+  /rug-alert:
+    get:
+      tags: [Premium]
+      summary: Rug detection alerts
+      description: "Real-time rug detection alerts. Price: $0.012 USDC"
+      operationId: rugAlert
+      responses:
+        '200': { description: Rug alerts }
+        '402': { description: Payment required — $0.012 USDC }
+
+  /launch-alert:
+    get:
+      tags: [Premium]
+      summary: New launch alerts
+      description: "Real-time new token launch alerts. Price: $0.01 USDC"
+      operationId: launchAlert
+      responses:
+        '200': { description: Launch alerts }
+        '402': { description: Payment required — $0.01 USDC }
+
+  /mcp-handshake:
+    post:
+      tags: [MCP]
+      summary: MCP protocol handshake
+      description: "MCP protocol server — initialize, tools/list, resources/list are FREE. tools/call requires x402 payment. 10 tools available."
+      operationId: mcpHandshake
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jsonrpc: { type: string, example: "2.0" }
+                method: { type: string, example: "initialize" }
+                id: { type: integer, example: 1 }
+                params: { type: object }
+      responses:
+        '200':
+          description: MCP protocol response
+        '402':
+          description: Payment required for tools/call operations
+
+components:
+  securitySchemes:
+    x402:
+      type: apiKey
+      in: header
+      name: X-PAYMENT
+      description: x402 payment proof header (USDC on Base)
+externalDocs:
+  description: Full documentation and examples
+  url: https://github.com/michaelhutchings626-hub/alien-plugg-x402
